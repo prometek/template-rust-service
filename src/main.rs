@@ -3,8 +3,15 @@ use config::Config;
 use serde::Deserialize;
 use prometheus::{Encoder, TextEncoder, Counter, register_counter};
 use log::info;
+use std::sync::LazyLock;
 
-static REQUEST_COUNTER: Counter = register_counter!("request_count", "Nombre de requêtes reçues").unwrap();
+static REQUEST_COUNTER: LazyLock<Counter> = LazyLock::new(|| {
+    register_counter!(
+        "request_count",
+        "Nombre de requêtes reçues"
+    )
+    .unwrap()
+});
 
 #[derive(Deserialize)]
 struct Settings {
@@ -46,7 +53,7 @@ async fn main() -> std::io::Result<()> {
         .unwrap();
 
     let addr = format!("{}:{}", settings.server_host, settings.server_port);
-    info!("Starting server at {}", addr);
+    info!("Starting server at {addr}");
     HttpServer::new(|| App::new().service(health).service(metrics).service(index))
         .bind(addr)?
         .run()
