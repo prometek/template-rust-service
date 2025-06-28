@@ -1,0 +1,17 @@
+{
+  "name": "Rust Microservice Dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/home/vscode/workspace",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "extensions": [
+    "rust-lang.rust-analyzer",
+    "ms-azuretools.vscode-docker"
+  ],
+  "forwardPorts": [8000],
+  "remoteUser": "vscode"
+}

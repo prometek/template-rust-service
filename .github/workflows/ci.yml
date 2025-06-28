@@ -1,0 +1,37 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: '1.70'
+      - name: Cache Cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry
+      - name: Cache Cargo index
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-git
+      - name: Install Clippy & fmt
+        run: rustup component add clippy rustfmt
+      - name: Lint
+        run: cargo clippy -- -D warnings
+      - name: Format check
+        run: cargo fmt -- --check
+      - name: Test
+        run: cargo test -- --nocapture
+      - name: Build release
+        run: cargo build --release
+      - name: Build Docker image
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/template-rust-service:${{ github.sha }} .

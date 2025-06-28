@@ -1,0 +1,6 @@
+[book]
+title = "Documentation de rust-template-service"
+src = "docs/src"
+
+[build]
+create-missing = true
