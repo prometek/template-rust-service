@@ -1,4 +1,4 @@
-FROM rust:1.70-slim
+FROM rust:1.88-slim-bullseye
 WORKDIR /app
 
 # Build minimal binary
