@@ -1,17 +1,12 @@
-use actix_web::{get, App, HttpServer, HttpResponse, Responder};
+use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 use config::Config;
-use serde::Deserialize;
-use prometheus::{Encoder, TextEncoder, Counter, register_counter};
 use log::info;
+use prometheus::{register_counter, Counter, Encoder, TextEncoder};
+use serde::Deserialize;
 use std::sync::LazyLock;
 
-static REQUEST_COUNTER: LazyLock<Counter> = LazyLock::new(|| {
-    register_counter!(
-        "request_count",
-        "Nombre de requêtes reçues"
-    )
-    .unwrap()
-});
+static REQUEST_COUNTER: LazyLock<Counter> =
+    LazyLock::new(|| register_counter!("request_count", "Nombre de requêtes reçues").unwrap());
 
 #[derive(Deserialize)]
 struct Settings {
