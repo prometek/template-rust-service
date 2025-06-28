@@ -10,9 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup Rust
-        uses: actions/setup-rust@v1
+        uses: actions-rs/toolchain@v1
+        
         with:
-          rust-version: '1.70'
+          toolchain: stable
+          profile: minimal
+          override: true
       - name: Cache Cargo registry
         uses: actions/cache@v3
         with:
